@@ -39,9 +39,6 @@ export default class Paddle {
   // update canvas
   update(deltaTime) {
     // delta-time aka dt is the change in time ie how much time has past
-    if (!deltaTime) {
-      return;
-    }
 
     this.position.x += this.speed;
 
