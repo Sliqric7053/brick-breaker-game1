@@ -26,7 +26,7 @@ function gameLoop(timestamp) {
 
   ball.update(deltaTime);
   ball.draw(ctx);
-
+  
   requestAnimationFrame(gameLoop);
 }
 
