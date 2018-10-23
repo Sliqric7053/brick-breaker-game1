@@ -1,6 +1,6 @@
 export default class Paddle {
-  constructor(gameWidth, gameHeight) {
-    this.gameWidth = gameWidth;
+  constructor(game) {
+    this.gameWidth = game.gameWidth;
 
     //   size of paddle
     this.width = 150;
@@ -8,8 +8,8 @@ export default class Paddle {
 
     // position of paddle
     this.position = {
-      x: gameWidth / 2 - this.width / 2,
-      y: gameHeight - this.height - 10
+      x: game.gameWidth / 2 - this.width / 2,
+      y: game.gameHeight - this.height - 10
     };
 
     // velocity of paddle
