@@ -7,10 +7,9 @@ const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
 
 let game = new Game(GAME_WIDTH, GAME_HEIGHT);
-game.start();
 
 let lastTime = 0;
-// game loop - runs every frame, updates all objects, redraws them into their new position, move to next frame
+// game loop  - runs every frame, updates all objects, redraws them into their new position, move to next frame
 function gameLoop(timestamp) {
   let deltaTime = timestamp - lastTime;
   lastTime = timestamp;
