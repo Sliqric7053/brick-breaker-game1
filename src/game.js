@@ -2,13 +2,14 @@ import Ball from "./ball";
 import Paddle from "./paddle";
 import InputHandler from "./input";
 import Brick from "./brick";
-import { level1, buildLevel } from "./levels";
+import { level1, level2, level3, buildLevel } from "./levels";
 
 const GAMESTATE = {
   PAUSED: 0,
   RUNNING: 1,
   MENU: 2,
-  GAMEOVER: 3
+  GAMEOVER: 3,
+  NEWLEVEL: 4
 };
 
 export default class Game {
@@ -19,20 +20,24 @@ export default class Game {
     this.gamestate = GAMESTATE.MENU;
     this.ball = new Ball(this);
     this.paddle = new Paddle(this);
+    new InputHandler(this.paddle, this);
     this.gameObjects = [];
     this.lives = 3;
-    new InputHandler(this.paddle, this);
+    this.bricks = []
+    this.currentLevel = 0;
+    this.levels = [level1, level2, level3]
   }
 
   start() {
-    // Only start game from MENU
-    if (this.gamestate !== GAMESTATE.MENU) return;
+    // Only start game from MENU and NEWLEVEL
+    if (this.gamestate !== GAMESTATE.MENU && this.gamestate !== GAMESTATE.NEWLEVEL) return;
 
-    let bricks = buildLevel(this, level1);
+    this.bricks = buildLevel(this, this.levels[this.currentLevel]);
+    this.ball.resetPositionAndSpeed();
 
-    this.gameObjects = [this.ball, this.paddle, ...bricks];
+    this.gameObjects = [this.ball, this.paddle];
 
-    this.gamestate = GAMESTATE.RUNNING;
+    this.gamestate = GAMESTATE.RUNNING; 
   }
 
   update(deltaTime) {
@@ -46,16 +51,23 @@ export default class Game {
     )
       return;
 
-    this.gameObjects.forEach(gameObject => {
+    [...this.gameObjects, ...this.bricks].forEach(gameObject => {
       gameObject.update(deltaTime);
     });
-    this.gameObjects = this.gameObjects.filter(gameObject => {
-      return !gameObject.markedForDeletions;
+
+    this.bricks = this.bricks.filter(brick => {
+      return !brick.markedForDeletions;
     });
+
+    if (this.bricks.length === 0) {
+      this.currentLevel++;
+      this.gamestate = GAMESTATE.NEWLEVEL;
+      this.start();
+    }
   }
 
   draw(ctx) {
-    this.gameObjects.forEach(gameObject => {
+    [...this.gameObjects, ...this.bricks].forEach(gameObject => {
       gameObject.draw(ctx);
     });
 
