@@ -7,17 +7,7 @@ export default class Ball {
     this.gameWidth = game.gameWidth;
     this.gameHeight = game.gameHeight;
     this.game = game;
-
-    this.position = {
-      x: 10,
-      y: 10
-    };
-
-    this.speed = {
-      x: 6,
-      y: 4
-    };
-
+    this.resetPositionAndSpeed();
     this.size = 20;
   }
 
@@ -31,6 +21,18 @@ export default class Ball {
     );
   }
 
+  resetPositionAndSpeed() {
+    this.position = {
+      x: 10,
+      y: 400
+    };
+
+    this.speed = {
+      x: 4,
+      y: -2
+    };
+  }
+
   update(deltaTime) {
     this.position.x += this.speed.x;
     this.position.y += this.speed.y;
@@ -40,9 +42,16 @@ export default class Ball {
       this.speed.x = -this.speed.x;
     }
 
-    // avoid ball going through the vertical walls
-    if (this.position.y + this.size > this.gameHeight || this.position.y < 0) {
+    // top wall
+    if (this.position.y < 0) {
       this.speed.y = -this.speed.y;
+    }
+
+    // bottom wall
+    if (this.position.y + this.size > this.gameHeight) {
+      this.game.lives--;
+      console.log("lives", this.game.lives);
+      this.resetPositionAndSpeed();
     }
 
     if (detectCollision(this, this.game.paddle)) {
