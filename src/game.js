@@ -60,6 +60,8 @@ export default class Game {
     });
 
     if (this.bricks.length === 0) {
+      if (this.levels.length < 1) return;
+
       this.currentLevel++;
       this.gamestate = GAMESTATE.NEWLEVEL;
       this.start();
